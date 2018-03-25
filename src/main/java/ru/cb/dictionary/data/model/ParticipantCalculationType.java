@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="uer")
-public class ParticipantCalculationType {
+public class ParticipantCalculationType extends AbstractEntity {
     @Id
     @Column(name="id", nullable=false, unique=true, length=2)
     private String id;

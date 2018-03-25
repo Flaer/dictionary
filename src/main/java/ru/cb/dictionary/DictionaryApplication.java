@@ -6,11 +6,10 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Lazy;
 import ru.cb.dictionary.ui.MainController;
 import ru.cb.dictionary.ui.ViewHolder;
 
-@Lazy
+//@Lazy
 @SpringBootApplication
 public class DictionaryApplication extends AbstractJavaFxApplicationSupport {
 

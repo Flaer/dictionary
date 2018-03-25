@@ -2,6 +2,7 @@ package ru.cb.dictionary.data.model;
 
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 /**
@@ -10,12 +11,12 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "bnkseek")
-public class IdentityCode {
+public class IdentityCode extends AbstractEntity {
 
     @Id
     @Column(name = "newnum", nullable = false, unique = true, length = 9)
     // Банковский идентификационный код (БИК)
-    private String code;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "rgn", nullable = false)
@@ -77,8 +78,8 @@ public class IdentityCode {
     public IdentityCode() {
     }
 
-    public String getCode() {
-        return code;
+    public String getId() {
+        return id;
     }
 
     public AreaCode getAreaCode() {
@@ -147,5 +148,77 @@ public class IdentityCode {
 
     public LocalDate getDatech() {
         return datech;
+    }
+
+    public void setId(@NotNull String id) {
+        this.id = id;
+    }
+
+    public void setAreaCode(AreaCode areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public void setSettlementType(SettlementType settlementType) {
+        this.settlementType = settlementType;
+    }
+
+    public void setCalculationType(ParticipantCalculationType calculationType) {
+        this.calculationType = calculationType;
+    }
+
+    public void setParticipantType(ParticipantType participantType) {
+        this.participantType = participantType;
+    }
+
+    public void setReal(String real) {
+        this.real = real;
+    }
+
+    public void setInd(String ind) {
+        this.ind = ind;
+    }
+
+    public void setNnp(String nnp) {
+        this.nnp = nnp;
+    }
+
+    public void setAdr(String adr) {
+        this.adr = adr;
+    }
+
+    public void setRkc(String rkc) {
+        this.rkc = rkc;
+    }
+
+    public void setNamep(String namep) {
+        this.namep = namep;
+    }
+
+    public void setTelef(String telef) {
+        this.telef = telef;
+    }
+
+    public void setRegn(String regn) {
+        this.regn = regn;
+    }
+
+    public void setOkpo(String okpo) {
+        this.okpo = okpo;
+    }
+
+    public void setDtizm(LocalDate dtizm) {
+        this.dtizm = dtizm;
+    }
+
+    public void setKsnp(String ksnp) {
+        this.ksnp = ksnp;
+    }
+
+    public void setDatein(LocalDate datein) {
+        this.datein = datein;
+    }
+
+    public void setDatech(LocalDate datech) {
+        this.datech = datech;
     }
 }

@@ -7,6 +7,16 @@
 
 <AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.cb.dictionary.ui.MainController">
    <children>
+      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.topAnchor="25.0">
+         <children>
+            <Label text="NEWNUM: ">
+               <HBox.margin>
+                  <Insets left="5.0" />
+               </HBox.margin>
+            </Label>
+            <TextField fx:id="newnum" />
+         </children>
+      </HBox>
       <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="File">
@@ -19,27 +29,8 @@
             <Point3D />
          </rotationAxis>
       </MenuBar>
-      <TableView fx:id="table" prefHeight="376.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="25.0">
-        <columns>
-          <TableColumn prefWidth="75.0" text="NEWNUM" />
-          <TableColumn prefWidth="75.0" text="REG" />
-            <TableColumn prefWidth="75.0" text="TNP" />
-            <TableColumn prefWidth="75.0" text="UER" />
-            <TableColumn prefWidth="75.0" text="PZN" />
-            <TableColumn prefWidth="75.0" text="REAL" />
-            <TableColumn prefWidth="75.0" text="IND" />
-            <TableColumn prefWidth="75.0" text="NNP" />
-            <TableColumn prefWidth="75.0" text="ADR" />
-            <TableColumn prefWidth="75.0" text="RKC" />
-            <TableColumn prefWidth="75.0" text="NAMEP" />
-            <TableColumn prefWidth="75.0" text="TELEF" />
-            <TableColumn prefWidth="75.0" text="REGN" />
-            <TableColumn prefWidth="75.0" text="OKPO" />
-            <TableColumn prefWidth="75.0" text="DT_IZM" />
-            <TableColumn prefWidth="75.0" text="KSNP" />
-            <TableColumn prefWidth="75.0" text="DATE_IN" />
-            <TableColumn prefWidth="75.0" text="DATE_CH" />
-        </columns>
+      <TableView fx:id="table" prefHeight="350.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+          <!--<columnResizePolicy><TableView fx:constant="CONSTRAINED_RESIZE_POLICY" /></columnResizePolicy>-->
       </TableView>
    </children>
 </AnchorPane>

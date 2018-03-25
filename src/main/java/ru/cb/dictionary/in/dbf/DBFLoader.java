@@ -5,6 +5,7 @@ import com.linuxense.javadbf.DBFField;
 import com.linuxense.javadbf.DBFReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 import ru.cb.dictionary.in.InternalData;
 import ru.cb.dictionary.in.Loader;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * Created by libragimov on 25.03.2018.
  * // todo refactor
  */
+@Component
 public class DBFLoader implements Loader {
 
     final Logger logger = LoggerFactory.getLogger(DBFLoader.class);
