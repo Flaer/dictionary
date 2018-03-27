@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface SettlementTypeRepository extends CrudRepository<SettlementType, String> {
 
-    @Cacheable("Dictionary")
+    @Cacheable(value = "dictionary", key = "#root.target")
     List<SettlementType> findAllByOrderByNameAsc();
 }

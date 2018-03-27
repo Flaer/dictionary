@@ -20,6 +20,7 @@ public class ParticipantCalculationType implements NamedEntity {
 
 
     public ParticipantCalculationType() {
+        // for entity correct creation
     }
 
     public String getId() {

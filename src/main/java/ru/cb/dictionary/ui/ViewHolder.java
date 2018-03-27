@@ -18,15 +18,7 @@ public class ViewHolder {
         return view;
     }
 
-    public void setView(Parent view) {
-        this.view = view;
-    }
-
     public Object getController() {
         return controller;
-    }
-
-    public void setController(Object controller) {
-        this.controller = controller;
     }
 }

@@ -1,5 +1,6 @@
 package ru.cb.dictionary.in.bic;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,5 +72,7 @@ public class TestBicExtractor {
         values.add(record);
         data.setValues(values);
         List<IdentityCode> code = extractor.extract(data);
+        Assert.assertEquals(1, code.size());
+        Assert.assertEquals("040147781", code.get(0).getId());
     }
 }

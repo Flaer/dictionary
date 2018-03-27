@@ -1,6 +1,7 @@
-package ru.cb.dictionary.data;
+package ru.cb.dictionary.data.facade;
 
 import ru.cb.dictionary.data.model.*;
+import ru.cb.dictionary.data.search.Pattern;
 
 import java.util.List;
 
@@ -13,8 +14,7 @@ public interface DataService {
     List<ParticipantType> getParticipantTypes();
     List<SettlementType> getSettlementTypes();
 
-    // todo refactor to SearchPattern
-    List<IdentityCode> searchIdentityCodes(String id, AreaCode areaCode, ParticipantType participantType);
+    List<IdentityCode> searchIdentityCodes(Pattern pattern);
 
     void deleteIdentityCode(IdentityCode entity);
 

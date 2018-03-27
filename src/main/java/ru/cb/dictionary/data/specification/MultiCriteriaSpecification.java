@@ -1,10 +1,11 @@
 package ru.cb.dictionary.data.specification;
 
 import org.springframework.data.jpa.domain.Specification;
-import ru.cb.dictionary.data.model.AreaCode;
+import org.springframework.lang.Nullable;
 import ru.cb.dictionary.data.model.IdentityCode;
-import ru.cb.dictionary.data.model.IdentityCode_;
-import ru.cb.dictionary.data.model.ParticipantType;
+import ru.cb.dictionary.data.search.Criteria;
+import ru.cb.dictionary.data.search.Operation;
+import ru.cb.dictionary.data.search.Pattern;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -18,28 +19,26 @@ import java.util.List;
  */
 public class MultiCriteriaSpecification implements Specification<IdentityCode> {
 
-    private String id;
-    private AreaCode areaCode;
-    private ParticipantType participantType;
+    private Pattern pattern;
 
-    public MultiCriteriaSpecification(String id, AreaCode areaCode, ParticipantType participantType) {
-        this.id = id;
-        this.areaCode = areaCode;
-        this.participantType = participantType;
+    public MultiCriteriaSpecification(Pattern pattern) {
+        this.pattern = pattern;
     }
 
     @Override
+    @Nullable
     public Predicate toPredicate(Root<IdentityCode> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
         List<Predicate> predicates = new ArrayList<>();
 
-        if (id != null)
-            predicates.add(criteriaBuilder.like(root.get(IdentityCode_.id), "%" + id + "%"));
+        for(Criteria criteria: pattern.getCriterias()) {
+            if(criteria.getValue() == null)
+                continue;
 
-        if (areaCode != null)
-            predicates.add(criteriaBuilder.equal(root.get(IdentityCode_.areaCode), areaCode));
-
-        if (participantType != null)
-            predicates.add(criteriaBuilder.equal(root.get(IdentityCode_.participantType), participantType));
+            if(Operation.EQUAL.equals(criteria.getOperation()))
+                predicates.add(criteriaBuilder.equal(root.get(criteria.getField().getValue()), criteria.getValue()));
+            if(Operation.LIKE.equals(criteria.getOperation()))
+                predicates.add(criteriaBuilder.like(root.get(criteria.getField().getValue()), "%" + criteria.getValue() + "%"));
+        }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
     }

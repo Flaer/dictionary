@@ -17,14 +17,4 @@ public class ViewInitializer {
             return new ViewHolder(loader.getRoot(), loader.getController());
         }
     }
-
-    public ViewHolder loadViewAndController(String url, ActionController controller) throws IOException {
-        try(InputStream fxmlStream = getClass().getClassLoader().getResourceAsStream(url)) {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setController(controller);
-            loader.load(fxmlStream);
-            controller.setView(loader.getRoot());
-            return new ViewHolder(loader.getRoot(), loader.getController());
-        }
-    }
 }

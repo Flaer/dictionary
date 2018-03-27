@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.DatePicker;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.cb.dictionary.data.DataService;
+import ru.cb.dictionary.data.facade.DataService;
 import ru.cb.dictionary.data.model.*;
 import ru.cb.dictionary.ui.control.EntityBox;
 import ru.cb.dictionary.ui.control.LimitedTextField;

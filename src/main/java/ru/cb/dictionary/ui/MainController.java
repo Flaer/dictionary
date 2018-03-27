@@ -16,22 +16,22 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import ru.cb.dictionary.data.DataService;
-import ru.cb.dictionary.data.ImportService;
+import ru.cb.dictionary.data.facade.DataService;
+import ru.cb.dictionary.data.facade.ImportService;
 import ru.cb.dictionary.data.model.*;
-import ru.cb.dictionary.in.InternalData;
-import ru.cb.dictionary.in.Loader;
+import ru.cb.dictionary.data.search.Criteria;
+import ru.cb.dictionary.data.search.Field;
+import ru.cb.dictionary.data.search.Operation;
+import ru.cb.dictionary.data.search.Pattern;
 import ru.cb.dictionary.ui.control.EntityBox;
+import ru.cb.dictionary.ui.dialog.ActionDialog;
 import ru.cb.dictionary.ui.dialog.AlertMessage;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -53,20 +53,16 @@ public class MainController {
     @FXML
     private Label size;
 
-    @Autowired
-    private Loader loader;
+
     @Autowired
     private ImportService importService;
     @Autowired
     private DataService dataService;
-    @Autowired
-    private ActionController actionController;
-    @Qualifier("actionView")
-    @Autowired
-    private ViewHolder actionView;
 
 
-    private ObservableList<IdentityCode> identityCodes;
+    private Pattern pattern = new Pattern();
+
+    private ObservableList<IdentityCode> identityCodes = FXCollections.observableArrayList();
 
     /**
      * Инициализация контроллера от JavaFX.
@@ -162,29 +158,7 @@ public class MainController {
     private void showActionDialog(String title, IdentityCode code) {
 
         boolean newCode = code.getId() == null;
-
-        Dialog<IdentityCode> dialog = new Dialog<>();
-        dialog.setTitle(title);
-        dialog.setResizable(false);
-        actionController.prepareView(code);
-        dialog.getDialogPane().setContent(actionView.getView());
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
-        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-
-        dialog.setResultConverter((ButtonType buttonType) -> {
-
-            if (buttonType == ButtonType.OK) {
-                return actionController.fill();
-            }
-            return null;
-        });
-
-        final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
-        okButton.addEventFilter(ActionEvent.ACTION, ae -> {
-            if (!actionController.validate()) {
-                ae.consume(); //not valid
-            }
-        });
+        ActionDialog dialog = new ActionDialog(title, code);
 
         Optional<IdentityCode> result = dialog.showAndWait();
         if(result.isPresent()) {
@@ -193,28 +167,31 @@ public class MainController {
                 identityCodes.add(result.get());
             table.refresh();
         }
-
     }
 
     private void tableContextMenuInit() {
         table.setRowFactory((TableView<IdentityCode> tableView) -> {
             final TableRow<IdentityCode> row = new TableRow<>();
             final ContextMenu rowMenu = new ContextMenu();
+
             MenuItem addItem = new MenuItem("Добавить");
             addItem.setOnAction((ActionEvent event) -> {
                 showActionDialog("Добавить", new IdentityCode());
-                calculateSize();
+                updateAmount();
             });
+
             MenuItem editItem = new MenuItem("Изменить");
             editItem.setOnAction((ActionEvent event) ->
                     showActionDialog("Изменить", row.getItem()));
+
             MenuItem removeItem = new MenuItem("Удалить");
             removeItem.setOnAction((ActionEvent event) -> {
                         table.getItems().remove(row.getItem());
                         dataService.deleteIdentityCode(row.getItem());
-                        calculateSize();
+                        updateAmount();
                     }
             );
+
             rowMenu.getItems().addAll(addItem, editItem, removeItem);
 
             // only display context menu for non-null items:
@@ -230,7 +207,7 @@ public class MainController {
         rgn.init(dataService.getAreaCodes());
         rgn.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends AreaCode> observable, AreaCode oldValue, AreaCode newValue) ->
-                    searchByCriteria("areaCode", newValue)
+                    searchByCriteria(new Criteria(Field.AREA, newValue))
         );
     }
 
@@ -238,7 +215,7 @@ public class MainController {
         pzn.setItems(FXCollections.observableArrayList(dataService.getParticipantTypes()));
         pzn.getSelectionModel().selectedItemProperty().addListener(
                 (ObservableValue<? extends ParticipantType> observable, ParticipantType oldValue, ParticipantType newValue) ->
-                    searchByCriteria("participantType", newValue)
+                    searchByCriteria(new Criteria(Field.PARTICIPANT_TYPE, newValue))
         );
     }
 
@@ -254,10 +231,10 @@ public class MainController {
         tableContextMenuInit();
         rgnBoxInit();
         pznBoxInit();
-        // init criteria
-        criteria.put("id", null);
-        criteria.put("participantType", null);
-        criteria.put("areaCode", null);
+        // init pattern
+        pattern.addCriteria(new Criteria(Field.ID, Operation.LIKE, null));
+        pattern.addCriteria(new Criteria(Field.PARTICIPANT_TYPE, Operation.EQUAL, null));
+        pattern.addCriteria(new Criteria(Field.AREA, Operation.EQUAL, null));
     }
 
     /**
@@ -279,8 +256,7 @@ public class MainController {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             try {
-                InternalData internalData = loader.fromFile(file);
-                List<IdentityCode> codes = importService.save(internalData);
+                List<IdentityCode> codes = importService.upload(file);
                 fillTable(codes);
             } catch (DBFException | IOException e) {
                 new AlertMessage().show("Не удалось импортировать файл.");
@@ -291,8 +267,7 @@ public class MainController {
     @FXML
     public void onNewnumKeyPressed(KeyEvent event) {
         if (KeyCode.ENTER.equals(event.getCode())) {
-            searchByCriteria("id", newnum.getText());
-            // todo работать через один раз созданный ObservableList
+            searchByCriteria(new Criteria(Field.ID, Operation.LIKE, newnum.getText()));
         }
     }
 
@@ -300,7 +275,7 @@ public class MainController {
     public void onRgnKeyPressed(KeyEvent event) {
         if (KeyCode.DELETE.equals(event.getCode())) {
             rgn.getSelectionModel().clearSelection();
-            searchByCriteria("areaCode", null);
+            searchByCriteria(new Criteria(Field.AREA, null));
         }
     }
 
@@ -308,30 +283,25 @@ public class MainController {
     public void onPznKeyPressed(KeyEvent event) {
         if (KeyCode.DELETE.equals(event.getCode())) {
             pzn.getSelectionModel().clearSelection();
-            searchByCriteria("participantType", null);
+            searchByCriteria(new Criteria(Field.PARTICIPANT_TYPE, null));
         }
     }
 
-    public void calculateSize() {
+    public void updateAmount() {
         size.setText("Количество: " + identityCodes.size());
     }
 
     public void fillTable(List<IdentityCode> codes) {
-        // todo что делать для больших списков данных
-        identityCodes = FXCollections.observableArrayList(codes);
+        // для больших списков данных ввести пагинацию или загрузку видимой области
+        identityCodes.clear();
+        identityCodes.addAll(codes);
         table.setItems(identityCodes);
-        calculateSize();
+        updateAmount();
     }
 
-    private Map<String, Object> criteria = new HashMap<>();
-
-    public void searchByCriteria(String key, Object value) {
-        criteria.put(key, value);
-        // todo вырефакторить использование строк в качестве ключей. приводит к ошибкам
-        List<IdentityCode> codes = dataService.searchIdentityCodes(
-                (String) criteria.get("id"),
-                (AreaCode) criteria.get("areaCode"),
-                (ParticipantType) criteria.get("participantType"));
+    public void searchByCriteria(Criteria criteria) {
+        pattern.addCriteria(criteria);
+        List<IdentityCode> codes = dataService.searchIdentityCodes(pattern);
         fillTable(codes);
     }
 }

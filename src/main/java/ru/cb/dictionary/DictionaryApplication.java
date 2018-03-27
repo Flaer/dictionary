@@ -23,7 +23,7 @@ public class DictionaryApplication extends AbstractJavaFxApplicationSupport {
 
 	@Bean
 	public CacheManager cacheManager() {
-		return new ConcurrentMapCacheManager("Dictionary");
+		return new ConcurrentMapCacheManager("dictionary");
 	}
 
 	@Override

@@ -76,6 +76,7 @@ public class IdentityCode implements AbstractEntity {
 
 
     public IdentityCode() {
+        // for entity correct creation
     }
 
     public String getId() {

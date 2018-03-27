@@ -1,10 +1,11 @@
-package ru.cb.dictionary.data;
+package ru.cb.dictionary.data.facade;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.cb.dictionary.data.model.*;
 import ru.cb.dictionary.data.repository.*;
+import ru.cb.dictionary.data.search.Pattern;
 import ru.cb.dictionary.data.specification.MultiCriteriaSpecification;
 
 import java.util.List;
@@ -45,20 +46,9 @@ public class DataServiceImpl implements DataService {
         return settlementTypeRepository.findAllByOrderByNameAsc();
     }
 
-    /*public static Specification<IdentityCode> areaCodeEquals(AreaCode areaCode) {
-        return (Root<IdentityCode> root, CriteriaQuery<?> query,
-                CriteriaBuilder builder) -> builder.equal(root.get("areaCode"), areaCode);
-    }
-
-    public static Specification<IdentityCode> participantTypeEquals(ParticipantType type) {
-        return (Root<IdentityCode> root, CriteriaQuery<?> query,
-                CriteriaBuilder builder) -> builder.equal(root.get("participantType"), type);
-    }*/
-
-
     @Override
-    public List<IdentityCode> searchIdentityCodes(String id, AreaCode areaCode, ParticipantType participantType) {
-        Specification<IdentityCode> spec = new MultiCriteriaSpecification(id, areaCode, participantType);
+    public List<IdentityCode> searchIdentityCodes(Pattern pattern) {
+        Specification<IdentityCode> spec = new MultiCriteriaSpecification(pattern);
         return identityCodesRepository.findAll(spec);
     }
 

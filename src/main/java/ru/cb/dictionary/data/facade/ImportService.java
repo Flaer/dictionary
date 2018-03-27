@@ -1,8 +1,9 @@
-package ru.cb.dictionary.data;
+package ru.cb.dictionary.data.facade;
 
 import ru.cb.dictionary.data.model.IdentityCode;
-import ru.cb.dictionary.in.InternalData;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -10,5 +11,5 @@ import java.util.List;
  */
 public interface ImportService {
 
-    List<IdentityCode> save(InternalData data);
+    List<IdentityCode> upload(File file) throws IOException;
 }

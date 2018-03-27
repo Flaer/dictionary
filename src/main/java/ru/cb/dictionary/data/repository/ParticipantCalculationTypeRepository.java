@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface ParticipantCalculationTypeRepository extends CrudRepository<ParticipantCalculationType, String> {
 
-    @Cacheable("Dictionary")
+    @Cacheable(value = "dictionary", key = "#root.target")
     List<ParticipantCalculationType> findAllByOrderByNameAsc();
 }

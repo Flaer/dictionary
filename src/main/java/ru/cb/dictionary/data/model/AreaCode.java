@@ -20,6 +20,7 @@ public class AreaCode implements NamedEntity {
 
 
     public AreaCode() {
+        // for entity correct creation
     }
 
     public String getId() {

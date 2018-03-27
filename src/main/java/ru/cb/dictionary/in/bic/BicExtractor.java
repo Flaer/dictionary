@@ -3,7 +3,7 @@ package ru.cb.dictionary.in.bic;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import ru.cb.dictionary.data.DataService;
+import ru.cb.dictionary.data.facade.DataService;
 import ru.cb.dictionary.data.model.*;
 import ru.cb.dictionary.in.Extractor;
 import ru.cb.dictionary.in.InternalData;
@@ -24,8 +24,6 @@ public class BicExtractor implements Extractor<IdentityCode> {
     @Autowired
     private DataService dataService;
 
-    public BicExtractor() {
-    }
 
     private LocalDate toDate(Date data) {
         if(data == null)
@@ -40,19 +38,18 @@ public class BicExtractor implements Extractor<IdentityCode> {
 
     @PostConstruct
     private void prepareCache() {
-        for(AreaCode code:  dataService.getAreaCodes())
+        for(AreaCode code: dataService.getAreaCodes())
             areaCodes.put(code.getId(), code);
         for(ParticipantCalculationType type:  dataService.getParticipantCalculationTypes())
             participantCalculationTypes.put(type.getId(), type);
-        for(SettlementType type:  dataService.getSettlementTypes())
+        for(SettlementType type: dataService.getSettlementTypes())
             settlementTypes.put(type.getId(), type);
-        for(ParticipantType type:  dataService.getParticipantTypes())
+        for(ParticipantType type: dataService.getParticipantTypes())
             participantTypes.put(type.getId(), type);
     }
 
     @Override
     public List<IdentityCode> extract(@NotNull InternalData data) {
-
 
         List<IdentityCode> result = new ArrayList<>();
         for(List<Object> record: data.getValues()) {

@@ -20,7 +20,6 @@ import java.util.List;
 /**
  * DBF reader
  * Created by libragimov on 25.03.2018.
- * // todo refactor
  */
 @Component
 public class DBFLoader implements Loader {

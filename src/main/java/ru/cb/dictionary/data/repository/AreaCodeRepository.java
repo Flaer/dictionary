@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface AreaCodeRepository extends CrudRepository<AreaCode, String> {
 
-    @Cacheable("Dictionary")
+    @Cacheable(value = "dictionary", key = "#root.target")
     List<AreaCode> findAllByOrderByNameAsc();
 }

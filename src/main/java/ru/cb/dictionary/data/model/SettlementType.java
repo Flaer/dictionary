@@ -22,6 +22,7 @@ public class SettlementType implements NamedEntity {
 
 
     public SettlementType() {
+        // for entity correct creation
     }
 
     public String getId() {
