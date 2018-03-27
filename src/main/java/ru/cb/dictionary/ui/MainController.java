@@ -1,5 +1,6 @@
 package ru.cb.dictionary.ui;
 
+import com.linuxense.javadbf.DBFException;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ObservableValue;
@@ -22,9 +23,11 @@ import ru.cb.dictionary.data.model.*;
 import ru.cb.dictionary.in.InternalData;
 import ru.cb.dictionary.in.Loader;
 import ru.cb.dictionary.ui.control.EntityBox;
+import ru.cb.dictionary.ui.dialog.AlertMessage;
 
 import javax.annotation.PostConstruct;
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -275,9 +278,13 @@ public class MainController {
         );
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            InternalData internalData = loader.fromFile(file);
-            List<IdentityCode> codes = importService.save(internalData);
-            fillTable(codes);
+            try {
+                InternalData internalData = loader.fromFile(file);
+                List<IdentityCode> codes = importService.save(internalData);
+                fillTable(codes);
+            } catch (DBFException | IOException e) {
+                new AlertMessage().show("Не удалось импортировать файл.");
+            }
         }
     }
 

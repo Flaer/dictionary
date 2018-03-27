@@ -27,7 +27,7 @@ public class DBFLoader implements Loader {
 
     final Logger logger = LoggerFactory.getLogger(DBFLoader.class);
 
-    public InternalData fromFile(File file) {
+    public InternalData fromFile(File file) throws IOException {
         InternalData result = new InternalData();
         List<String> fields = new ArrayList<>();
         try(DBFReader reader = new DBFReader(new FileInputStream(file), Charset.forName("cp866"))) {
@@ -47,6 +47,7 @@ public class DBFLoader implements Loader {
             result.setValues(values);
         } catch (DBFException | IOException e) {
             logger.error("", e);
+            throw e;
         }
         return result;
     }

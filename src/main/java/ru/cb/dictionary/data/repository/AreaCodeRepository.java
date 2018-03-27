@@ -1,5 +1,6 @@
 package ru.cb.dictionary.data.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import ru.cb.dictionary.data.model.AreaCode;
 
@@ -10,7 +11,6 @@ import java.util.List;
  */
 public interface AreaCodeRepository extends CrudRepository<AreaCode, String> {
 
-    @Override
-    List<AreaCode> findAll();
+    @Cacheable("Dictionary")
     List<AreaCode> findAllByOrderByNameAsc();
 }

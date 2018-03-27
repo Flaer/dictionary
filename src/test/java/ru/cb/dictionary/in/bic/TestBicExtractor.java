@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import ru.cb.dictionary.data.model.IdentityCode;
 import ru.cb.dictionary.in.Extractor;
 import ru.cb.dictionary.in.InternalData;
+import ru.cb.dictionary.ui.ActionController;
 import ru.cb.dictionary.ui.MainController;
 import ru.cb.dictionary.ui.ViewHolder;
 
@@ -35,11 +36,19 @@ public class TestBicExtractor {
     @Qualifier("bic")
     private Extractor extractor;
 
+    // mock UI иначе тесты при сборке не проходят
     @Qualifier("mainView")
     @MockBean
     private ViewHolder mainView;
     @MockBean
     private MainController mainController;
+
+    @Qualifier("actionView")
+    @MockBean
+    private ViewHolder actionView;
+    @MockBean
+    private ActionController actionController;
+
 
     private Date toDate(String data) throws ParseException {
         SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");

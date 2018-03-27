@@ -19,7 +19,4 @@ public interface IdentityCodesRepository extends CrudRepository<IdentityCode, St
 
     @Override
     List<IdentityCode> findAll(@Nullable Specification<IdentityCode> spec);
-
-    @Override
-    List<IdentityCode> findAll();
 }

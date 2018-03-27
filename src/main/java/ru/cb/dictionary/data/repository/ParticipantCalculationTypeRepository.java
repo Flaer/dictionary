@@ -1,5 +1,6 @@
 package ru.cb.dictionary.data.repository;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.repository.CrudRepository;
 import ru.cb.dictionary.data.model.ParticipantCalculationType;
 
@@ -10,7 +11,6 @@ import java.util.List;
  */
 public interface ParticipantCalculationTypeRepository extends CrudRepository<ParticipantCalculationType, String> {
 
-    @Override
-    List<ParticipantCalculationType> findAll();
+    @Cacheable("Dictionary")
     List<ParticipantCalculationType> findAllByOrderByNameAsc();
 }

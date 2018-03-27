@@ -2,13 +2,13 @@ package ru.cb.dictionary.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.cb.dictionary.data.DataService;
 import ru.cb.dictionary.data.model.*;
 import ru.cb.dictionary.ui.control.EntityBox;
 import ru.cb.dictionary.ui.control.LimitedTextField;
+import ru.cb.dictionary.ui.dialog.AlertMessage;
 
 import javax.annotation.PostConstruct;
 
@@ -130,11 +130,7 @@ public class ActionController {
         if (dateIn.getValue() == null)
             errors.append(String.format(VALIDATION_ERROR, "DATE_IN"));
         if(errors.length() > 0) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Ошибка");
-            alert.setHeaderText("Проверьте правильность заполнения полей");
-            alert.setContentText(errors.toString());
-            alert.show();
+            new AlertMessage().show(errors.toString());
             return false;
         }
         return true;

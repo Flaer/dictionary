@@ -48,9 +48,9 @@
       </HBox>
       <MenuBar minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <menus>
-          <Menu mnemonicParsing="false" text="File">
+          <Menu mnemonicParsing="false" text="Меню">
             <items>
-                  <MenuItem id="openItem" mnemonicParsing="false" onAction="#loadDBF" text="Import dbf" />
+                  <MenuItem id="openItem" mnemonicParsing="false" onAction="#loadDBF" text="Импортировать dbf" />
             </items>
           </Menu>
         </menus>
