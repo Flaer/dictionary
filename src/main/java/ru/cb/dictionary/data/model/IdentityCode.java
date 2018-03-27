@@ -11,26 +11,26 @@ import java.time.LocalDate;
  */
 @Entity
 @Table(name = "bnkseek")
-public class IdentityCode extends AbstractEntity {
+public class IdentityCode implements AbstractEntity {
 
     @Id
     @Column(name = "newnum", nullable = false, unique = true, length = 9)
     // Банковский идентификационный код (БИК)
     private String id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "rgn", nullable = false)
     private AreaCode areaCode;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "tnp")
     private SettlementType settlementType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "uer", nullable = false)
     private ParticipantCalculationType calculationType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "pzn")
     private ParticipantType participantType;
 

@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="tnp")
-public class SettlementType extends AbstractEntity {
+public class SettlementType implements NamedEntity {
     @Id
     @Column(name="id", nullable=false, unique=true, length=3)
     private String id;

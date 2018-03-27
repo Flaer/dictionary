@@ -67,6 +67,7 @@ public class BicExtractor implements Extractor<IdentityCode> {
                 code.setAreaCode(areaCodeById.get());
             code.setInd((String)record.get(5));
             String settlementType = (String) record.get(6);
+            // todo refactor, load once, search in cache
             Optional<SettlementType> settlementTypeById = settlementTypeRepository.findById(settlementType);
             if(settlementTypeById.isPresent())
                 code.setSettlementType(settlementTypeById.get());

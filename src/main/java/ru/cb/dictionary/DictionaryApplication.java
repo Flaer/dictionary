@@ -6,7 +6,6 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import ru.cb.dictionary.ui.MainController;
 import ru.cb.dictionary.ui.ViewHolder;
 
 //@Lazy
@@ -16,9 +15,6 @@ public class DictionaryApplication extends AbstractJavaFxApplicationSupport {
 	@Qualifier("mainView")
 	@Autowired
 	private ViewHolder mainView;
-
-	@Autowired
-	private MainController mainController;
 
 	@Override
 	public void start(Stage stage) throws Exception {

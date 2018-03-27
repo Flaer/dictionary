@@ -15,10 +15,11 @@ import ru.cb.dictionary.in.InternalData;
 import ru.cb.dictionary.ui.MainController;
 import ru.cb.dictionary.ui.ViewHolder;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,13 +41,13 @@ public class TestBicExtractor {
     @MockBean
     private MainController mainController;
 
-    private LocalDate toDate(String data) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d/M/yyyy");
-        return LocalDate.parse(data, formatter);
+    private Date toDate(String data) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("d/M/yyyy");
+        return dateFormat.parse(data);
     }
 
     @Test
-    public void testExtract() {
+    public void testExtract() throws ParseException {
         InternalData data = new InternalData();
         List<List<Object>> values = new ArrayList<>();
         Object[] test = {"D(X3VkT$", "", "20", "5", "01", "659322", "1",

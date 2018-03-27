@@ -12,7 +12,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name="reg")
-public class AreaCode extends AbstractEntity {
+public class AreaCode implements NamedEntity {
     @Id
     @Column(name="id", nullable=false, unique=true, length=3)
     private String id;
