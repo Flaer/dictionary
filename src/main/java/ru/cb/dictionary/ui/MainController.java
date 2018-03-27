@@ -16,6 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.cb.dictionary.data.facade.DataService;
 import ru.cb.dictionary.data.facade.ImportService;
 import ru.cb.dictionary.data.model.*;
@@ -24,7 +25,6 @@ import ru.cb.dictionary.data.search.Field;
 import ru.cb.dictionary.data.search.Operation;
 import ru.cb.dictionary.data.search.Pattern;
 import ru.cb.dictionary.ui.control.EntityBox;
-import ru.cb.dictionary.ui.dialog.ActionDialog;
 import ru.cb.dictionary.ui.dialog.AlertMessage;
 
 import javax.annotation.PostConstruct;
@@ -53,6 +53,11 @@ public class MainController {
     @FXML
     private Label size;
 
+    @Autowired
+    private ActionController actionController;
+    @Qualifier("actionView")
+    @Autowired
+    private ViewHolder actionView;
 
     @Autowired
     private ImportService importService;
@@ -158,7 +163,29 @@ public class MainController {
     private void showActionDialog(String title, IdentityCode code) {
 
         boolean newCode = code.getId() == null;
-        ActionDialog dialog = new ActionDialog(title, code);
+        Dialog<IdentityCode> dialog = new Dialog<>();
+
+        dialog.setResizable(false);
+        dialog.setTitle(title);
+        actionController.prepareView(code);
+        dialog.getDialogPane().setContent(actionView.getView());
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.OK);
+        dialog.getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+
+        dialog.setResultConverter((ButtonType buttonType) -> {
+
+            if (buttonType == ButtonType.OK) {
+                return actionController.fill();
+            }
+            return null;
+        });
+
+        final Button okButton = (Button) dialog.getDialogPane().lookupButton(ButtonType.OK);
+        okButton.addEventFilter(ActionEvent.ACTION, ae -> {
+            if (!actionController.validate()) {
+                ae.consume(); //not valid
+            }
+        });
 
         Optional<IdentityCode> result = dialog.showAndWait();
         if(result.isPresent()) {
